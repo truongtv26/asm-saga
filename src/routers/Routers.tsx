@@ -1,24 +1,28 @@
-import { Route, Routes } from 'react-router-dom'
-import { 
-  BaseLayout, 
-  HomePage, 
-  PageNotFound, 
-  ShopPage,
-  SigninPage,
-  SignupPage} from '.'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { BaseLayout, HomePage, PageNotFound, PrivateRoute, ShopPage, SigninPage, SignupPage } from '.'
+import { useCookies } from 'react-cookie';
 
 const Routers = () => {
+    const [cookies] = useCookies(['user']);
+    
     return (
-      <Routes>
-        <Route path='/' element={<BaseLayout/>}>
-          <Route index element={<HomePage/>} />
-          <Route path='shop' element={<ShopPage/>}/>
-        </Route>
-        
-        <Route path='/signin' element={<SigninPage/>}/>
-        <Route path='/signup' element={<SignupPage/>}/>
-        <Route path='*' element={<PageNotFound/>}/>
-      </Routes>
+        <Routes>
+            <Route path='/signin' element={ Boolean(cookies['user']) ? <Navigate to={'/'}/> : <SigninPage />}/>
+            <Route path='/signup' element={ Boolean(cookies['user']) ? <Navigate to={'/'}/> :<SignupPage />}/>
+            <Route
+                path='/'
+                element={
+                    <PrivateRoute isAllowed={() => Boolean(cookies['user'])}>
+                        <BaseLayout />
+                    </PrivateRoute>
+                }
+            >
+                <Route index element={<HomePage />} />
+                <Route path='/shop' element={<ShopPage />} />
+            </Route>
+            
+            <Route path='*' element={<PageNotFound />} />
+        </Routes>
     )
 }
 

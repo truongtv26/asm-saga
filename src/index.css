@@ -14,6 +14,9 @@
 }
 
 @layer base {
+     body {
+          @apply h-full
+     }
      body * {
           @apply font-roboto text-[14px] text-primary
      }

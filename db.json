@@ -1,0 +1,38 @@
+{
+  "users": [
+    {
+      "email": "troung12@gmail.com",
+      "password": "$2a$10$2JeB0YzvgLE0aqt0mNkYRuIrw6GzNxCVpGfdd7rw8z6wJeR.EHJd6",
+      "fullname": "truong",
+      "id": "939dkNZ"
+    },
+    {
+      "email": "troung12@gmail1.com",
+      "password": "$2a$10$.JhDPQPC7o4yvotVf/j/N.1IU8EIvWGBQCRl/4GcMz7kjy1K9o0Sm",
+      "fullname": "truong",
+      "id": "Y_g8dJh"
+    },
+    {
+      "email": "troung12@gmail2.com",
+      "password": "$2a$10$suNd/m0uU8y.DKeGx/f5r.tbr7fQkaz9KzROJ4DOqivc1yjIyq4Qm",
+      "fullname": "truong",
+      "id": "9ZsXoOn"
+    },
+    {
+      "email": "truongtv26@gmail.com",
+      "password": "$2a$10$ykuRYlCf/iZrZy4H/zUprOvDftyRqa7p7kbp6arRalq.8e5i8dX1C",
+      "fullname": "truongtv26",
+      "phone": "0348571051",
+      "isRemembered": false,
+      "id": "NqdVrzf"
+    },
+    {
+      "email": "truongtv26@gmail.com1",
+      "password": "$2a$10$SxGMNoT8ft8JiCuc5MtPX.B37J5ZM9u5JEV514BAl4s2ZuPvH9/5O",
+      "fullname": "truong",
+      "phone": "",
+      "isRemembered": false,
+      "id": "t3clNFX"
+    }
+  ]
+}

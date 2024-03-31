@@ -1,15 +1,30 @@
 import { CaretDownOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons'
 import { Col, Dropdown, Layout, Row, Space } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { MenuProps } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../redux/store'
+import { logoutAction } from '../../redux/auth'
+import { useCookies } from 'react-cookie'
 
 const { Header } = Layout
 
 const HeaderComponent = () => {
+    const user = useSelector((state: RootState) => state.user)
+    const [cookies, setCookies, removeCookies] = useCookies()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handleLogout = () => {
+        dispatch(logoutAction());
+        removeCookies('user');
+        navigate('/signin')
+    };
+    
     const items: MenuProps['items'] = [
         {
             key: '1',
-            label: <Link to={'/signin'}>Signin</Link>
+            label: <p onClick={handleLogout}>logout</p>
         }
     ]
     return (
@@ -35,19 +50,25 @@ const HeaderComponent = () => {
                 <Col span={8} className='text-end'>
                     <ul className='flex gap-2 justify-end'>
                         <li className='italic capitalize cursor-pointer'>
-                            <ShoppingCartOutlined className='px-1'/>
+                            <ShoppingCartOutlined className='px-1' />
                             cart
                         </li>
                         <li className='italic capitalize cursor-pointer'>
-                            <UserOutlined className='px-1'/>
-                            <Dropdown menu={{ items }}>
-                                <a onClick={(e) => e.preventDefault()}>
-                                    <Space>
-                                        account
-                                        <CaretDownOutlined />
-                                    </Space>
-                                </a>
-                            </Dropdown>
+                            {user.isLoading ? (
+                                'Loading...'
+                            ) : (
+                                <>
+                                    <UserOutlined className='px-1' />
+                                    <Dropdown menu={{ items }}>
+                                        <a onClick={(e) => e.preventDefault()}>
+                                            <Space>
+                                                {user.user?.fullname}
+                                                <CaretDownOutlined />
+                                            </Space>
+                                        </a>
+                                    </Dropdown>
+                                </>
+                            )}
                         </li>
                     </ul>
                 </Col>
