@@ -5,10 +5,9 @@ import { signup, signupFailure, signupRequest, signupSuccess } from '.'
 import { jwtDecode } from 'jwt-decode'
 import { useCookies } from 'react-cookie'
 import { IUser } from '../../types/Type'
-import { toast } from 'react-toastify'
 
 const SignupPage = () => {
-    const [cookies, setCookies] = useCookies(['user'])
+    const [ , setCookies] = useCookies(['user'])
     const dispatch = useDispatch()
 
     const handleSignup = (data: IAuth) => {

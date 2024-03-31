@@ -8,7 +8,7 @@ import { jwtDecode } from 'jwt-decode'
 
 const SigninPage = () => {
     const dispatch = useDispatch()
-    const [cookies, setCookie] = useCookies(['user']);
+    const [ , setCookie] = useCookies(['user']);
 
     const handleSignin = (data: IAuth) => {
         dispatch(signinRequest())
