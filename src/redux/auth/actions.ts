@@ -17,7 +17,7 @@ import { IUser } from "../../types/Type";
 
 export const signinRequest = createAction(SIGNIN_REQUEST)
 export const signinSuccess = createAction<IUser>(SIGNIN_SUCCESS)
-export const signinFailure = createAction(SIGNIN_FAILURE)
+export const signinFailure = createAction<string>(SIGNIN_FAILURE)
 export const signupRequest = createAction(SIGNUP_REQUEST)
 export const signupSuccess = createAction<IUser>(SIGNUP_SUCCESS)
 export const signupFailure = createAction<string>(SIGNUP_FAILURE)
