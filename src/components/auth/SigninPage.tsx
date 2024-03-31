@@ -24,11 +24,11 @@ const SigninPage = () => {
                 }
                 dispatch(signinSuccess(res.user as IUser))
             } else {
-                dispatch(signinFailure())
+                dispatch(signinFailure("Signin failed"))
             }
         })
         .catch((err) => {
-            dispatch(signinFailure())
+            dispatch(signinFailure(err.response.data))
         })
     }
 
