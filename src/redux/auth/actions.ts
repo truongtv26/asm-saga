@@ -26,4 +26,3 @@ export const logoutAction = createAction(LOGOUT)
 export const getUserRequest = createAction(GET_USER_REQUEST)
 export const getUserSuccess = createAction<IUser>(GET_USER_SUCCESS)
 export const getUserFailure = createAction(GET_USER_FAILURE)
-
