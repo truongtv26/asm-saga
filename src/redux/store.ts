@@ -3,11 +3,13 @@ import createSagaMiddleware from 'redux-saga';
 import rootSaga from "../sagas";
 import AuthReducer from "./auth/reducer";
 import { useDispatch } from "react-redux";
+import shopReducer from "./shop/reducer";
 
 const sagaMiddleware = createSagaMiddleware()
 export const store = configureStore({
      reducer: {
-          user: AuthReducer
+          user: AuthReducer,
+          shop: shopReducer
      },
      middleware: getDefaultMiddleware => getDefaultMiddleware().concat(sagaMiddleware)
 })

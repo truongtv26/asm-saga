@@ -26,19 +26,19 @@ const AuthReducer = createReducer(initialState, builder => {
           return {...state, user: action.payload, error: null, isLoading: false }
      })
      .addCase(signinFailure, (state, action) => {
-          return { ... state, isLoading: false, error: action.payload,}
+          return { ...state, isLoading: false, error: action.payload,}
      })
      .addCase(logoutAction, (state) => {
-          return { ... state, user: null}
+          return { ...state, user: null}
      })
      .addCase(signupRequest, (state) => {
-          return { ... state, isLoading: true}
+          return { ...state, isLoading: true}
      })
      .addCase(signupSuccess, (state, action) => {
-          return { ... state, user: action.payload, error: null, isLoading: false }
+          return { ...state, user: action.payload, error: null, isLoading: false }
      })
      .addCase(signupFailure, (state, action) => {
-          return { ... state, error: action.payload, isLoading: false}
+          return { ...state, error: action.payload, isLoading: false}
      })
      .addCase(getUserRequest, (state) => {
           return {...state, isLoading: true,}

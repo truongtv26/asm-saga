@@ -22,11 +22,10 @@ function App() {
                     }
                 })
                 .catch((err) => {
-                    console.log(err)
                     dispatch(getUserFailure())
                 })
         }
-    }, [])
+    }, [dispatch])
 
     return <Routers />
 }
