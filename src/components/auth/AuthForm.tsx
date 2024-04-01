@@ -23,7 +23,7 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
     const userStore = useSelector((state: RootState) => state.user)
 
     const [formData, setFormData] = useState<IAuth>(initialState)
-    
+
     const onFormChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
@@ -32,13 +32,14 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
     }
 
     const formValidator = {
-        email: (_:any, value: string) => {
+        email: (_: any, value: string) => {
             if (formData.email.length <= 0) {
-                return Promise.reject("Please enter a valid email!")
+                return Promise.reject('Please enter a valid email!')
             }
-            const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
+            const emailRegex =
+                /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
             if (!emailRegex.test(value)) {
-                return Promise.reject("Email is not valid!")
+                return Promise.reject('Email is not valid!')
             }
             return Promise.resolve()
         }
@@ -46,8 +47,7 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
 
     const onFinish = () => handle(formData)
 
-    const onFinishFailed = () => {
-    }
+    const onFinishFailed = () => {}
     return (
         <div className='w-full min-h-[100vh] bg-[url("/assets/images/banner1.jpg")] bg-no-repeat bg-cover'>
             <Form
@@ -61,13 +61,14 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
                     {mode === 'signin' ? 'SIGN IN' : 'SIGN UP'}
                 </h2>
 
-                <Form.Item name='email' rules={
-                    [
+                <Form.Item
+                    name='email'
+                    rules={[
                         {
-                            validator: formValidator.email,
+                            validator: formValidator.email
                         }
-                    ]
-                        }>
+                    ]}
+                >
                     <Input
                         prefix={<MailOutlined className='site-form-item-icon' />}
                         placeholder='Email'
@@ -87,10 +88,13 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
                 {mode === 'signin' && (
                     <Form.Item>
                         <Form.Item name='remember' valuePropName='checked' noStyle>
-                            <Checkbox onChange={({target}) => {
-                                setFormData({...formData, isRemembered: target.checked})
-                                
-                            }}>Remember me</Checkbox>
+                            <Checkbox
+                                onChange={({ target }) => {
+                                    setFormData({ ...formData, isRemembered: target.checked })
+                                }}
+                            >
+                                Remember me
+                            </Checkbox>
                         </Form.Item>
                         <Link to={'/forgot-password'} className='text-blue-600 float-right'>
                             Forgot password
@@ -101,24 +105,33 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
                 {mode === 'signup' && (
                     <>
                         <Form.Item name='fullname' rules={[{ required: true, message: 'Please input your Fullname!' }]}>
-                            <Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder='Fullname' 
-                            name='fullname'
-                            onChange={onFormChange}/>
+                            <Input
+                                prefix={<UserOutlined className='site-form-item-icon' />}
+                                placeholder='Fullname'
+                                name='fullname'
+                                onChange={onFormChange}
+                            />
                         </Form.Item>
                         <Form.Item name='phone'>
-                            <Input prefix={<PhoneOutlined className='site-form-item-icon' />} placeholder='Phone' 
-                            name='phone'
-                            onChange={onFormChange} />
+                            <Input
+                                prefix={<PhoneOutlined className='site-form-item-icon' />}
+                                placeholder='Phone'
+                                name='phone'
+                                onChange={onFormChange}
+                            />
                         </Form.Item>
                     </>
                 )}
-                {
-                    userStore.error ? <span style={{color: 'red'}}>{userStore.error}</span> : ""
-                }
+                {userStore.error ? <span style={{ color: 'red' }}>{userStore.error}</span> : ''}
                 <Form.Item className='flex flex-col justify-center items-center'>
-                    <Button type='primary' htmlType='submit' className='w-full'>
-                        <p className='text-white w-full'>{mode === 'signin' ? 'Signin' : 'Signup'}</p>
-                    </Button>
+                    {userStore.isLoading ? (
+                        <Button>Loading</Button>
+                    ) : (
+                        <Button type='primary' htmlType='submit' className='w-full'>
+                            <p className='text-white w-full'>{mode === 'signin' ? 'Signin' : 'Signup'}</p>
+                        </Button>
+                    )}
+
                     <p>
                         Or{' '}
                         {mode === 'signin' ? (
