@@ -50,6 +50,7 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
     const onFinishFailed = () => {}
     return (
         <div className='w-full min-h-[100vh] bg-[url("/assets/images/banner1.jpg")] bg-no-repeat bg-cover'>
+            
             <Form
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -59,6 +60,9 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
             >
                 <h2 className='text-center text-primary text-[24px] font-mono italic pb-8'>
                     {mode === 'signin' ? 'SIGN IN' : 'SIGN UP'}
+                    {
+                        userStore.error ? <p className='text-center text-red-600'>{userStore.error}</p> : ""
+                    }
                 </h2>
 
                 <Form.Item
@@ -125,7 +129,7 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
                 {userStore.error ? <span style={{ color: 'red' }}>{userStore.error}</span> : ''}
                 <Form.Item className='flex flex-col justify-center items-center'>
                     {userStore.isLoading ? (
-                        <Button>Loading</Button>
+                        <Button>Please waiting</Button>
                     ) : (
                         <Button type='primary' htmlType='submit' className='w-full'>
                             <p className='text-white w-full'>{mode === 'signin' ? 'Signin' : 'Signup'}</p>
