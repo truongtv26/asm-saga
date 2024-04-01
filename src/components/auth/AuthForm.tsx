@@ -129,7 +129,7 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
                 {userStore.error ? <span style={{ color: 'red' }}>{userStore.error}</span> : ''}
                 <Form.Item className='flex flex-col justify-center items-center'>
                     {userStore.isLoading ? (
-                        <Button>Please waiting</Button>
+                        <Button>Waiting...</Button>
                     ) : (
                         <Button type='primary' htmlType='submit' className='w-full'>
                             <p className='text-white w-full'>{mode === 'signin' ? 'Signin' : 'Signup'}</p>
