@@ -21,7 +21,7 @@ const ProductList = (props: ProductListProps) => {
                     hoverable
                     cover={<PreviewProduct product={product}/>}
                 >
-                    <Link to={'/detail/' + product._id.$oid}>
+                    <Link to={'/detail/' + product._id.$oid} onClick= {() => window.scrollTo(0, 0)}>
                         <div className='h-full flex flex-col gap-2'>
                             <p className='line-clamp-2 text-[16px] font-bold italic'>{product.name}</p>
                             <p className='italic'>{vietnameseCurrency(product.price)}</p>

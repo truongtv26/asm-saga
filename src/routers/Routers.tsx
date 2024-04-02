@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { BaseLayout, HomePage, PageNotFound, PrivateRoute, ProductDetail, ShopPage, SigninPage, SignupPage } from '.'
+import { BaseLayout, CartPage, HomePage, PageNotFound, PrivateRoute, ProductDetail, ShopPage, SigninPage, SignupPage } from '.'
 import { useCookies } from 'react-cookie';
 
 const Routers = () => {
@@ -20,6 +20,7 @@ const Routers = () => {
                 <Route index element={<HomePage />} />
                 <Route path='/shop' element={<ShopPage />} />
                 <Route path='/detail/:id' element={<ProductDetail />} />
+                <Route path='/cart' element={<CartPage/>}/>
             </Route>
             
             <Route path='*' element={<PageNotFound />} />

@@ -126,7 +126,6 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
                         </Form.Item>
                     </>
                 )}
-                {userStore.error ? <span style={{ color: 'red' }}>{userStore.error}</span> : ''}
                 <Form.Item className='flex flex-col justify-center items-center'>
                     {userStore.isLoading ? (
                         <Button>Waiting...</Button>
