@@ -12,7 +12,7 @@ const { Header } = Layout
 
 const HeaderComponent = () => {
 	const user = useSelector((state: RootState) => state.user)
-	const [, , removeCookies] = useCookies()
+	const [, ,removeCookies] = useCookies()
 	const [cart] = useLocalStorage('cart')
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -29,6 +29,7 @@ const HeaderComponent = () => {
 			label: <p onClick={handleLogout}>logout</p>
 		}
 	]
+
 	return (
 		<Header className='bg-secondary px-2'>
 			<Row>
@@ -54,7 +55,7 @@ const HeaderComponent = () => {
 						<li className='italic capitalize cursor-pointer'>
 							<Link to={'/cart'}>
 								<ShoppingCartOutlined className='px-1' />
-								<Badge count={cart.length} color='#009e35'>
+								<Badge count={cart && cart.length} color='#009e35'>
 									Cart
 								</Badge>
 							</Link>
