@@ -1,13 +1,18 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { getProductsFailure, getProductsRequest, getProductsSuccess } from "./actions";
+import { filterProducts, getProductFailure, getProductRequest, getProductSuccess, getProductsFailure, getProductsRequest, getProductsSuccess } from "./actions";
 import { IProduct } from "../../types/Type";
 
-type ShopState = {
+export type FilterType = {
+     name?: string
+     category?: string
+}
+
+export type ShopState = {
      productList: IProduct[] | null
      product: IProduct | null
      isLoading: boolean
      error: string | null
-     filter: {}
+     filter: FilterType
      totalPages: number | null
      currentPage: number | null
 }
@@ -32,6 +37,18 @@ const shopReducer = createReducer(initialState, builder => {
      })
      .addCase(getProductsFailure, (state, action) => {
           return { ...state, error: action.payload, isLoading: false}
+     })
+     .addCase(getProductRequest, (state) => {
+          return { ...state, isLoading: true }
+     })
+     .addCase(getProductSuccess, (state, action) => {
+          return { ...state, product: action.payload, isLoading: false }
+     })
+     .addCase(getProductFailure, (state, action) => {
+          return { ...state, error: action.payload, isLoading: false }
+     })
+     .addCase(filterProducts, (state, action) => {
+          return { ...state, filter: action.payload } 
      })
 })
 

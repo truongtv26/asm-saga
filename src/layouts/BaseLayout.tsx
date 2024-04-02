@@ -2,7 +2,8 @@ import { Outlet } from 'react-router-dom'
 import FooterComponent from '../components/footer'
 import HeaderComponent from '../components/header'
 import { Layout } from 'antd'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const { Content } = Layout
 

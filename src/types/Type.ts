@@ -16,4 +16,5 @@ export interface IProduct {
      name: string
      price: number
      short_desc?: string
+     quantity?: number
 }
