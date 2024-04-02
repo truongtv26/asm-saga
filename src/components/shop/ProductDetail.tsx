@@ -52,7 +52,7 @@ const ProductDetail = () => {
 			.catch(() => {
 				dispatch(getProductFailure('Product not found'))
 			})
-	}, [dispatch])
+	}, [dispatch, id])
 
 	const slides: Array<any> = []
 	const thumbs: Array<any> = []
@@ -80,16 +80,22 @@ const ProductDetail = () => {
 		if (!productSelected?.quantity) {
 			toast.error('Please select a quantity')
 		} else {
-			if (cart.some((item: any) => item.product_id.$oid === productSelected._id.$oid)) {
-				toast.error('Product already exists')
+			if (!cart) {
+				setCart([{ ...product, quantity: productSelected.quantity }])
 			} else {
-				setCart([
-					...cart,
-					{
-						product_id: productSelected._id,
-						quantity: productSelected.quantity
-					}
-				])
+				const productExist = cart.find((item: IProduct) => item._id.$oid === productSelected._id.$oid)
+				let newCartData: IProduct[] = []
+
+				if (productExist) {
+					newCartData = cart.map((item: IProduct) =>
+						item._id.$oid === productExist._id.$oid
+							? { ...productExist, quantity: (productExist.quantity += productSelected.quantity ?? 1) }
+							: item
+					)
+				} else {
+					newCartData = [...cart, { ...product, quantity: productSelected.quantity }]
+				}
+				setCart(newCartData)
 				toast.success('Product has been added to cart')
 			}
 		}
