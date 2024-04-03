@@ -81,7 +81,6 @@ const CartPage = () => {
 	}
 
 	const handleCheckout = () => {
-		
 		navigate('/checkout',{
 			state:{
 				cartItemSelected

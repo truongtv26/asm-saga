@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode'
 import apiInstance from './api'
 
 
-export const signin = async (data: IAuth): Promise<any> => {
+export const signin = async (data: IAuth): Promise<AxiosResponse<any>> => {
     try {
         const response = await apiInstance.post('signin', data)
         return response.data
@@ -13,7 +13,7 @@ export const signin = async (data: IAuth): Promise<any> => {
     }
 }
 
-export const signup = async (data: IAuth): Promise<any> => {
+export const signup = async (data: IAuth): Promise<AxiosResponse<any>> => {
     try {
         const response = await apiInstance.post('signup', data)
         return response.data
