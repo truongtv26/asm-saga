@@ -20,9 +20,7 @@ const initialState: OrderState = {
 const orderSlice = createSlice({
      name: 'order',
      initialState,
-     reducers: {
-          
-     },
+     reducers: {},
      extraReducers(builder) {
           builder
           .addCase(createOrder.fulfilled, (state, action) => {

@@ -4,9 +4,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import type { MenuProps } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
-import { logoutAction } from '../../redux/auth'
 import { useCookies } from 'react-cookie'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
+import { logout } from '../../redux/auth/auth.slice'
 
 const { Header } = Layout
 
@@ -18,7 +18,7 @@ const HeaderComponent = () => {
 	const dispatch = useDispatch()
 
 	const handleLogout = () => {
-		dispatch(logoutAction())
+		dispatch(logout())
 		removeCookies('user')
 		navigate('/signin')
 	}

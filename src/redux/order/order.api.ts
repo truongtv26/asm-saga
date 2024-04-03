@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { IOrder } from '../../types/Type'
 
-import { AxiosError, AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import apiInstance from '../../api/api'
 
 export const getOrders = createAsyncThunk('order/getOrders', async () => {

@@ -76,7 +76,11 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
 						onChange={onFormChange}
 					/>
 				</Form.Item>
-				<Form.Item name='password' rules={[{ required: true, message: 'Please input your Password!' }]}>
+				<Form.Item name='password' rules={
+					[
+						{ required: true, message: 'Please input your Password!' },
+						{min: 8, message: 'Minimum is 8 characters'}
+					]}>
 					<Input
 						prefix={<LockOutlined className='site-form-item-icon' />}
 						type='password'
