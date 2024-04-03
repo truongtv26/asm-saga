@@ -2,7 +2,12 @@ import { Form, Input, type FormProps, Button, Row, Col } from 'antd'
 import { useLocation } from 'react-router-dom'
 import { CartDataType } from '../cart/CartPage'
 import { vietnameseCurrency } from '../../helpers/currency'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState, useAppDispatch } from '../../redux/store'
+import { createOrder } from '../../redux/order/order.api'
+import { IOrder, IProduct } from '../../types/Type'
+import { toast } from 'react-toastify'
 
 type FieldType = {
 	fullname: string
@@ -10,13 +15,30 @@ type FieldType = {
 	phone_number: string
 	address: string
 }
+interface InitialBillingInfo extends Omit<IOrder, "id"> {
+    email: string;
+    phone_number: string;
+    address: string;
+    fullname: string;
+    details: IProduct[]
+}
+
+const initialBillingInfo: InitialBillingInfo = {
+    email: "",
+    phone_number: "",
+    address: "",
+    fullname: "",
+    details: []
+};
 
 const CheckoutPage = () => {
+	const order = useSelector((state: RootState) => state.order)
+	const dispatch = useAppDispatch()
 	const location = useLocation()
 	const [form] = Form.useForm()
 	const { cartItemSelected } = location.state || []
 
-	const [billingInfo, setBillingInfo] = useState({})
+	const [billingInfo, setBillingInfo] = useState(initialBillingInfo)
 
 	const onChangeBillingInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const target = event.target
@@ -29,11 +51,18 @@ const CheckoutPage = () => {
 	const onFinish: FormProps<FieldType>['onFinish'] = () => {
           const data = {
                ...billingInfo,
-               order_details: cartItemSelected,
+               details: cartItemSelected,
           }
-                    
+		dispatch(createOrder(data))
+		.unwrap()
+		.then(() => {
+			toast.success("Created Order")
+		})
+		.catch((error) => {
+			toast.error(error.message)
+		})
      }
-
+	
 	const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {}
 
 	return (
@@ -59,6 +88,7 @@ const CheckoutPage = () => {
 							rules={[{ required: true, message: 'Please input your full name' }]}
 							wrapperCol={{ lg: 22 }}
 							style={{ width: '100%', marginRight: 0 }}
+							initialValue={billingInfo.fullname}
 						>
 							<Input
 								className='py-2'
@@ -80,6 +110,7 @@ const CheckoutPage = () => {
 							]}
 							wrapperCol={{ lg: 22 }}
 							style={{ width: '100%', marginRight: 0 }}
+							initialValue={billingInfo.email}
 						>
 							<Input
 								className='py-2'
@@ -108,6 +139,7 @@ const CheckoutPage = () => {
 							]}
 							wrapperCol={{ lg: 22 }}
 							style={{ width: '100%', marginRight: 0 }}
+							initialValue={billingInfo.phone_number}
 						>
 							<Input
 								className='py-2'
@@ -122,6 +154,7 @@ const CheckoutPage = () => {
 							rules={[{ required: true, message: 'Please input your address' }]}
 							wrapperCol={{ lg: 22 }}
 							style={{ width: '100%', marginRight: 0 }}
+							initialValue={billingInfo.address}
 						>
 							<Input
 								className='py-2'
@@ -132,8 +165,8 @@ const CheckoutPage = () => {
 						</Form.Item>
 
 						<Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-							<Button type='primary' htmlType='submit'>
-								Submit
+							<Button type='primary' htmlType='submit' disabled={order.isLoading ? true : false}>
+								{order.isLoading ? "Checking..." : "Submit"}
 							</Button>
 						</Form.Item>
 					</Col>

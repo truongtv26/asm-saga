@@ -18,3 +18,12 @@ export interface IProduct {
      short_desc?: string
      quantity?: number
 }
+
+export interface IOrder {
+     id: number
+     email: string
+     fullname: string
+     phone_number: string
+     address: string
+     details: IProduct[]
+}
