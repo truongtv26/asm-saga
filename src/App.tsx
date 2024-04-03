@@ -1,29 +1,17 @@
-import { useDispatch } from 'react-redux'
 import './App.css'
 import Routers from './routers'
-import { getUserFailure, getUserRequest, getUserSuccess } from './redux/auth'
-import { getUserToken } from './api/authApi'
 import { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
+import { useAppDispatch } from './redux/store'
+import { getUser } from './redux/auth/auth.api'
 
 function App() {
     const [cookies] = useCookies()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (cookies.user) {
-            dispatch(getUserRequest())
-            getUserToken(cookies.user)
-                .then((res) => {
-                    if (res?.status === 200) {
-                        dispatch(getUserSuccess(res.data))
-                    } else {
-                        dispatch(getUserFailure())
-                    }
-                })
-                .catch((err) => {
-                    dispatch(getUserFailure())
-                })
+            dispatch(getUser(cookies.user))
         }
     }, [dispatch])
 
