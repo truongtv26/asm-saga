@@ -2,62 +2,55 @@ import { Col, Row } from 'antd'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Input } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { RootState } from '../../redux/store'
-import { getProducts, getProductsFailure, getProductsRequest, getProductsSuccess } from '.'
+import { RootState, useAppDispatch } from '../../redux/store'
 import ProductList from './ProductList'
 import { IProduct } from '../../types/Type'
-import { filterProducts } from '../../redux/shop/actions'
 import type { SearchProps } from 'antd/es/input/Search'
-import { FilterType } from '../../redux/shop/reducer'
+import { FilterType, productFilter, setProducts } from '../../redux/shop/shop.slice'
+import { getProducts } from '../../redux/shop/shop.api'
 
 const { Search } = Input
 
 const ShopPage = () => {
     const shop = useSelector((state: RootState) => state.shop)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(getProductsRequest())
-        getProducts()
-            .then((data) => {
-                if (data) {
-                    // trường hợp có filter trong store
+    useEffect(()=> {
+        dispatch(getProducts())
+        .unwrap()
+        .then((data) => {
+            if (data) {
+                // trường hợp có filter trong store
                     if (Object.keys(shop.filter).length > 0) {
                         let newData: IProduct[] = data
                         for (const [key, value] of Object.entries(shop.filter)) {
                             if (shop.filter.hasOwnProperty(key) && value !== '') {
                                 newData = newData.filter((product) => {
                                     return key !== 'name'
-                                        ? product[key as keyof IProduct] === shop.filter[key as keyof FilterType ]
+                                        ? product[key as keyof IProduct] === shop.filter[key as keyof FilterType]
                                         : product[key].toLowerCase().includes((shop.filter[key] ?? "").toLowerCase())
                                 })
                             }
                         }
-
-                        dispatch(getProductsSuccess(newData))
+                        dispatch(setProducts(newData))
                     } else {
-                        dispatch(getProductsSuccess(data))
+                        dispatch(setProducts(data))
                     }
-                } else {
-                    dispatch(getProductsFailure('get product list failed'))
-                }
-            })
-            .catch((err) => {
-                dispatch(getProductsFailure(err.response))
-            })
+            }
+        })
     }, [dispatch, shop.filter])
 
     const handleSelectCategory = (value: string) => {
         if (value === 'all') {
-            dispatch(filterProducts({}))
+            dispatch(productFilter({}))
         } else {
-            dispatch(filterProducts({ ...shop.filter, category: value }))
+            dispatch(productFilter({ ...shop.filter, category: value }))
         }
     }
 
-    const onSearch: SearchProps['onSearch'] = (value: string) => dispatch(filterProducts({ ...shop.filter, name: value }))
+    const onSearch: SearchProps['onSearch'] = (value: string) => dispatch(productFilter({ ...shop.filter, name: value }))
 
     return (
         <>
@@ -149,6 +142,7 @@ const ShopPage = () => {
                                 enterButton='Search'
                                 size='large'
                                 onSearch={onSearch}
+                                defaultValue={shop.filter.name ?? ""}
                             />
                         </Col>
                         <Col span={12}>

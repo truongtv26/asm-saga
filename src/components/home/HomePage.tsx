@@ -1,29 +1,18 @@
 import { Col, Row } from 'antd'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { ProductList, Slider, getProductsFailure, getProductsRequest, getProductsSuccess } from '.'
+import { ProductList, Slider  } from '.'
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getProducts } from '.'
-import { RootState } from '../../redux/store'
+import { useSelector } from 'react-redux'
+import { RootState, useAppDispatch } from '../../redux/store'
+import { getProducts } from '../../redux/shop/shop.api'
 
 const HomePage = () => {
     const shop = useSelector((state: RootState) => state.shop)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(getProductsRequest())
-        getProducts()
-            .then((data) => {
-                if (data) {
-                    dispatch(getProductsSuccess(data))
-                } else {
-                    dispatch(getProductsFailure('get product list failed'))
-                }
-            })
-            .catch((err) => {
-                dispatch(getProductsFailure(err.response.data))
-            })
+        dispatch(getProducts())
     }, [dispatch])
 
     return (
