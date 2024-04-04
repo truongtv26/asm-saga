@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getProducts } from '.'
-import { RootState } from '../../redux/store'
-import { getProductFailure, getProductRequest, getProductSuccess, getProductsSuccess } from '../../redux/shop/actions'
+import { RootState, useAppDispatch } from '../../redux/store'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Button, Col, InputNumber, Row } from 'antd'
@@ -18,39 +16,35 @@ import { Controller, FreeMode, Navigation, Thumbs } from 'swiper/modules'
 import { IProduct } from '../../types/Type'
 import { toast } from 'react-toastify'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
+import { getProducts } from '../../redux/shop/shop.api'
+import { setProduct } from '../../redux/shop/shop.slice'
 
 const ProductDetail = () => {
 	const { id } = useParams()
 	const [cart, setCart] = useLocalStorage('cart')
 
 	const [productSelected, setProductSelected] = useState<IProduct>()
-	const [swiper, setSwiper] = useState(null)
 	const [thumbsSwiper, setThumbsSwiper] = useState(null)
 
 	const [productImages, setProductImages] = useState<Array<any>>([])
 
 	const { product, productList, isLoading } = useSelector((state: RootState) => state.shop)
-	const dispatch = useDispatch()
+
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
-		dispatch(getProductRequest())
-		getProducts()
+		dispatch(getProducts())
+			.unwrap()
 			.then((data) => {
 				if (data) {
-					dispatch(getProductsSuccess(data))
 					const product = data.find((product) => product._id.$oid === id)
 					if (product) {
-						dispatch(getProductSuccess(product))
+						dispatch(setProduct(product as IProduct))
 						setProductSelected(product)
 						const imgs = [product.img1, product.img2, product.img3, product.img4]
 						setProductImages(imgs)
-					} else {
-						dispatch(getProductFailure('Product not found'))
 					}
 				}
-			})
-			.catch(() => {
-				dispatch(getProductFailure('Product not found'))
 			})
 	}, [dispatch, id])
 
@@ -164,12 +158,12 @@ const ProductDetail = () => {
 			<div className='mb-3'>
 				<h2 className='uppercase text-[22px] italic'>related products</h2>
 				{productList && product && (
-					<ProductList data={productList.filter((p) => p.category === product.category)} />
+					<ProductList data={productList.filter((p) => p.category === product.category && p._id.$oid !== product._id.$oid)} />
 				)}
 			</div>
 		</>
 	) : (
-		<Skeleton height={600} width={'100%'} />
+		<Skeleton height={600} width={'100%'} duration={0.5} />
 	)
 }
 

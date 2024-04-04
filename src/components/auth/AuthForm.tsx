@@ -48,6 +48,7 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
 	const onFinish = () => handle(formData)
 
 	const onFinishFailed = () => {}
+
 	return (
 		<div className='w-full min-h-[100vh] bg-[url("/assets/images/banner1.jpg")] bg-no-repeat bg-cover'>
 			<Form
@@ -76,11 +77,7 @@ const AuthForm = ({ mode, handle }: AuthFormProps) => {
 						onChange={onFormChange}
 					/>
 				</Form.Item>
-				<Form.Item name='password' rules={
-					[
-						{ required: true, message: 'Please input your Password!' },
-						{min: 8, message: 'Minimum is 8 characters'}
-					]}>
+				<Form.Item name='password' rules={[{ required: true, message: 'Please input your Password!' }]}>
 					<Input
 						prefix={<LockOutlined className='site-form-item-icon' />}
 						type='password'
