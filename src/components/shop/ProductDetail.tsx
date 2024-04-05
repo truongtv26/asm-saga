@@ -18,6 +18,7 @@ import { toast } from 'react-toastify'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { getProducts } from '../../redux/shop/shop.api'
 import { setProduct } from '../../redux/shop/shop.slice'
+import { updateToCart } from '../../redux/auth/auth.slice'
 
 const ProductDetail = () => {
 	const { id } = useParams()
@@ -40,7 +41,7 @@ const ProductDetail = () => {
 					const product = data.find((product) => product._id.$oid === id)
 					if (product) {
 						dispatch(setProduct(product as IProduct))
-						setProductSelected(product)
+						setProductSelected({ ...product, quantity: 1 })
 						const imgs = [product.img1, product.img2, product.img3, product.img4]
 						setProductImages(imgs)
 					}
@@ -76,6 +77,7 @@ const ProductDetail = () => {
 		} else {
 			if (!cart) {
 				setCart([{ ...product, quantity: productSelected.quantity }])
+				dispatch(updateToCart([{ ...product, quantity: productSelected.quantity }]))
 			} else {
 				const productExist = cart.find((item: IProduct) => item._id.$oid === productSelected._id.$oid)
 				let newCartData: IProduct[] = []
@@ -83,14 +85,17 @@ const ProductDetail = () => {
 				if (productExist) {
 					newCartData = cart.map((item: IProduct) =>
 						item._id.$oid === productExist._id.$oid
-							? { ...productExist, quantity: (productExist.quantity += productSelected.quantity ?? 1) }
+							? { ...item, quantity: item.quantity ? item.quantity + (productSelected.quantity ?? 1) : 1 }
 							: item
 					)
 				} else {
-					newCartData = [...cart, { ...product, quantity: productSelected.quantity }]
+					newCartData = [...cart, { ...productSelected, quantity: productSelected.quantity ?? 1 }]
 				}
 				setCart(newCartData)
-				toast.success('Product has been added to cart')
+				dispatch(updateToCart(newCartData))
+				toast.success('Product has been added to cart!', {
+					position: "top-center",
+				});
 			}
 		}
 	}
@@ -132,7 +137,7 @@ const ProductDetail = () => {
 							className='w-[200px]'
 							min={1}
 							max={10}
-							defaultValue={0}
+							defaultValue={1}
 							onChange={(value: any) => {
 								productSelected && setProductSelected({ ...productSelected, quantity: Number(value) })
 							}}
@@ -158,7 +163,11 @@ const ProductDetail = () => {
 			<div className='mb-3'>
 				<h2 className='uppercase text-[22px] italic'>related products</h2>
 				{productList && product && (
-					<ProductList data={productList.filter((p) => p.category === product.category && p._id.$oid !== product._id.$oid)} />
+					<ProductList
+						data={productList.filter(
+							(p) => p.category === product.category && p._id.$oid !== product._id.$oid
+						)}
+					/>
 				)}
 			</div>
 		</>
