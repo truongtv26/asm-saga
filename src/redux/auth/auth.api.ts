@@ -1,5 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { IAuth } from '../../components/auth/Type'
 import apiInstance from '../../api/api'
@@ -16,8 +16,14 @@ export const signin = createAsyncThunk('auth/signin', async (data: IAuth, thunkA
 			signal: thunkAPI.signal
 		})
 		return response.data
-	} catch (error: any) {
-		throw thunkAPI.rejectWithValue(error.response.data)
+	} catch (error: unknown) {
+		if (error instanceof AxiosError) {
+			if (error.response) {
+				throw thunkAPI.rejectWithValue(error.response.data)
+			}
+			throw thunkAPI.rejectWithValue(error.message)
+		}
+		throw thunkAPI.rejectWithValue("Something went wrong!")
 	}
 })
 
@@ -26,17 +32,29 @@ export const signup = createAsyncThunk('auth/signup', async (data: IAuth, thunkA
 		const response: AxiosResponse<AuthResponseType> = await apiInstance.post('signup', data)
 
 		return response.data
-	} catch (error: any) {
-		throw thunkAPI.rejectWithValue(error.response.data)
+	} catch (error: unknown) {
+		if (error instanceof AxiosError) {
+			if (error.response) {
+				throw thunkAPI.rejectWithValue(error.response.data)
+			}
+			throw thunkAPI.rejectWithValue(error.message)
+		}
+		throw thunkAPI.rejectWithValue("Something went wrong!")
 	}
 })
 
-export const getUser = createAsyncThunk('auth/getUser', async (token: string) => {
+export const getUser = createAsyncThunk('auth/getUser', async (token: string, thunkAPI) => {
 	try {
 		const user = jwtDecode(token)
 		const response = await apiInstance.get<IUser>(`users/${user.sub}`)
           return response.data
-	} catch (error) {
-		throw error
+	} catch (error: unknown) {
+		if (error instanceof AxiosError) {
+			if (error.response) {
+				throw thunkAPI.rejectWithValue(error.response.data)
+			}
+			throw thunkAPI.rejectWithValue(error.message)
+		}
+		throw thunkAPI.rejectWithValue("Something went wrong!")
 	}
 })
