@@ -17,7 +17,7 @@ export interface CartDataType {
 }
 
 const CartPage = () => {
-	const [cart, setCart] = useLocalStorage('cart')
+	const [cart, setCart] = useLocalStorage('cart', [])
 	const navigate = useNavigate()
 	const [cartItemSelected, setCartItemSelected] = useState<CartDataType[]>()
 
