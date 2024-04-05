@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from "react"
 
-export function useLocalStorage(key: string, defaultValue = undefined) {
+export function useLocalStorage(key: string, defaultValue: any = undefined) {
      const [value, setValue] = useState(()=>{
           const json = localStorage.getItem(key);
           if (json !== null) {
