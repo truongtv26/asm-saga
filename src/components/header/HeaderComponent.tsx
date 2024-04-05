@@ -7,13 +7,13 @@ import { RootState } from '../../redux/store'
 import { useCookies } from 'react-cookie'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { logout } from '../../redux/auth/auth.slice'
+import { useEffect } from 'react'
 
 const { Header } = Layout
 
 const HeaderComponent = () => {
 	const user = useSelector((state: RootState) => state.user)
 	const [, ,removeCookies] = useCookies()
-	const [cart] = useLocalStorage('cart')
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
@@ -22,7 +22,7 @@ const HeaderComponent = () => {
 		removeCookies('user')
 		navigate('/signin')
 	}
-
+	
 	const items: MenuProps['items'] = [
 		{
 			key: '1',
@@ -47,7 +47,7 @@ const HeaderComponent = () => {
 						</li>
 					</ul>
 				</Col>
-				<Col span={8} className='text-center font-bold font-mono text-[18px] italic uppercase'>
+				<Col span={8} className='text-center font-bold font-mono text-[18px] italic uppercase cursor-pointer'>
 					boutique
 				</Col>
 				<Col span={8} className='text-end'>
@@ -55,7 +55,7 @@ const HeaderComponent = () => {
 						<li className='italic capitalize cursor-pointer'>
 							<Link to={'/cart'}>
 								<ShoppingCartOutlined className='px-1' />
-								<Badge count={cart && cart.length} color='#009e35'>
+								<Badge count={user.cart.length} color='#009e35'>
 									Cart
 								</Badge>
 							</Link>
